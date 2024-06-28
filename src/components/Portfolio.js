@@ -34,7 +34,7 @@ const Portfolio = () => {
                 .then((response) => {
                     console.log('Data fetched successfully:', response.data);
                     setData(response.data);
-                    return axios.get('http://localhost:3001/posts');
+                    
                     setLoading(false);
                 })
                 .catch((error) => {
