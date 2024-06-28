@@ -30,7 +30,7 @@ const Portfolio = () => {
             navigate('/');
         } else {
             axios
-                .get('http://localhost:3001/user')
+                .get('http://localhost:3000/user')
                 .then((response) => {
                     console.log('Data fetched successfully:', response.data);
                     setData(response.data);
