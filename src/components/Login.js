@@ -1,54 +1,83 @@
 import React, { useState } from 'react';
-import { Image, Button, Input, HStack, FormControl, FormLabel, Flex, Stack, Heading } from '@chakra-ui/react';
+import { useForm } from 'react-hook-form';
+import { 
+  Image, Button, Input, HStack, FormControl, FormLabel, Flex, Stack, Heading, Text, 
+  Checkbox, Link,  FormErrorMessage
+} from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../auth/Auth';
 
 const Login = () => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
     const navigate = useNavigate();
+    const[Error, setError]=useState('');
 
-    const handleLogin = () => {
-        if (login(username, password)) {
-            navigate('/portfolio');
-        } else {
-            alert('Invalid credentials');
+    const onSubmit = async (data) => {
+        try {
+            if (await login(data.username, data.password)) {
+                navigate('/portfolio');
+            } else {
+                setError('Username and password are required');
+            return;
+            }
+        } catch (error) {
+            setError('An unexpected error occurred');
         }
     };
 
     return (
         <HStack w="full" h="100vh">
-            <Flex w="full" h="full" borderWidth={1}
-                display={{ base: 'none', md: 'flex' }}
-            >
+            <Flex w="full" h="full" borderWidth={1} display={{ base: 'none', md: 'flex' }}>
                 <Image
                     objectFit="cover"
                     w="full"
                     h="full"
-                    src="https://images.unsplash.com/photo-1517191434949-5e90cd67d2b6?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" />
+                    src="https://images.unsplash.com/photo-1517191434949-5e90cd67d2b6?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                    alt="Login background"
+                />
             </Flex>
             <Flex w="full" h="full" alignItems="center" justifyContent="center">
-                <Stack w="full" maxW="md" spacing={4} p={6}>
+                <Stack as="form" onSubmit={handleSubmit(onSubmit)} w="full" maxW="md" spacing={4} p={6}>
                     <Heading fontSize="2xl" color="purple.500">
                         Log in to your account
                     </Heading>
-                    <FormControl id="username">
-                        <FormLabel>Username</FormLabel>
-                        <Input value={username} onChange={(e) => setUsername(e.target.value)} />
+                    {Error && <Text color="red.500">{Error}</Text>}
+                    <FormControl isInvalid={errors.username}>
+                        <FormLabel htmlFor="username">Username</FormLabel>
+                        <Input 
+                            id="username"
+                            {...register("username", { 
+                                required: "Username is required" 
+                            })} 
+                        />
+                        <FormErrorMessage>
+                            {errors.username && errors.username.message}
+                        </FormErrorMessage>
                     </FormControl>
-                    <FormControl id="password">
-                        <FormLabel>Password</FormLabel>
-                        <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                    <FormControl isInvalid={errors.password}>
+                        <FormLabel htmlFor="password">Password</FormLabel>
+                        <Input 
+                            id="password"
+                            type="password"
+                            {...register("password", { 
+                                required: "Password is required" 
+                            })} 
+                        />
+                        <FormErrorMessage>
+                            {errors.password && errors.password.message}
+                        </FormErrorMessage>
                     </FormControl>
-                    <Stack spacing={4}
-                        direction="row" align="start" justify="space-between"></Stack>
-                    <Button onClick={handleLogin} colorScheme="purple">Login</Button>
+                    <Stack direction="row" align="start" justify="space-between">
+                        <Checkbox {...register("rememberMe")}>
+                            Remember me
+                        </Checkbox>
+                        <Link color="purple.500">Forgot password?</Link>
+                    </Stack>
+                    <Button type="submit" isLoading={isSubmitting} loadingText="Logging in" colorScheme="purple">
+                        Login
+                    </Button>
                 </Stack>
-
             </Flex>
-
-
-
         </HStack>
     );
 };

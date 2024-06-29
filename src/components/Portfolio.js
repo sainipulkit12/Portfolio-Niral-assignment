@@ -14,6 +14,7 @@ import {
     Icon,
     Flex,
     Container,
+    useColorModeValue,
 } from '@chakra-ui/react';
 import { FaReact, FaHtml5, FaCss3Alt, FaJsSquare } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
@@ -25,16 +26,18 @@ const Portfolio = () => {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
+    const bgColor = useColorModeValue('gray.100', 'gray.700');
+    const cardBgColor = useColorModeValue('white', 'gray.800');
+    const textColor = useColorModeValue('gray.800', 'white');
+
     useEffect(() => {
         if (!isAuthenticated()) {
             navigate('/');
         } else {
-            axios
-                .get('http://localhost:3000/user')
+            axios.get('http://localhost:3000/user')
                 .then((response) => {
                     console.log('Data fetched successfully:', response.data);
                     setData(response.data);
-                    
                     setLoading(false);
                 })
                 .catch((error) => {
@@ -50,7 +53,11 @@ const Portfolio = () => {
     };
 
     if (loading) {
-        return <Spinner size="xl" />;
+        return (
+            <Flex height="100vh" alignItems="center" justifyContent="center">
+                <Spinner size="xl" thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" />
+            </Flex>
+        );
     }
 
     if (!data) {
@@ -58,116 +65,104 @@ const Portfolio = () => {
     }
 
     return (
-        <Box
-            bgGradient="linear(to-r, teal.500, blue.500)"
-            // color="white"
-            p={8} minHeight="100vh">
-            <Flex as="nav" align="center" justify="space-between" wrap="wrap" w="100%" p={4} bg="black"
-                position="fixed"
-                top={0}
-                left={0}
-                right={0}
-                zIndex={1}
-                color="white">
+        <Box bg={bgColor} minHeight="100vh">
+            <Flex as="nav" align="center" justify="space-between" wrap="wrap" w="100%" p={4} bg="blue.500" color="white" position="fixed" top={0} left={0} right={0} zIndex={1}>
                 <Flex align="center">
                     <Heading as="h1" size="lg" letterSpacing={'tighter'}>
                         Portfolio
                     </Heading>
                 </Flex>
-                <Button onClick={handleLogout} colorScheme="purple">
+                <Button onClick={handleLogout} colorScheme="whiteAlpha" variant="outline">
                     Logout
                 </Button>
             </Flex>
-            <Container maxW="container.lg" py={8} mt={16}>
-                <VStack spacing={8} mt={8}>
-                    <SimpleGrid columns={{ base: 1, md: 2 }} spacing={20} w="100%">
-                        <Flex
-                            direction={{ base: 'column', md: 'row' }}
-                            align="center"
-                            w="100%"
-                            maxW="800px"
-                            bg="grey"
-                            p={6}
-                            borderRadius="md"
-                            boxShadow="md"
-                        >
-                            <Image
-                                borderRadius="full"
-                                boxSize="150px"
-                                src={pk1}
-                                alt="Profile Image"
-                                mb={{ base: 4, md: 0 }}
-                                mr={{ md: 6 }}
-                            />
-                            <Box textAlign={{ base: 'center', md: 'left' }}>
-                                <Heading as="h1" size="xl">
-                                    Hi, I'm {data.name}
-                                </Heading>
-                                <Text mt={2} fontSize="lg">
-                                    A passionate Front-End Developer specializing in building
-                                    responsive and interactive websites using modern technologies.
-                                </Text>
-                            </Box>
 
-                        </Flex>
+            <Container maxW="container.xl" py={16} mt={16}>
+                <VStack spacing={12}>
+                    <Flex direction={{ base: 'column', md: 'row' }} align="center" w="100%" bg={cardBgColor} p={8} borderRadius="lg" boxShadow="xl">
+                        <Image
+                            borderRadius="full"
+                            boxSize="200px"
+                            src={pk1}
+                            alt="Profile Image"
+                            mb={{ base: 6, md: 0 }}
+                            mr={{ md: 8 }}
+                        />
+                        <Box>
+                            <Heading as="h1" size="2xl" mb={4} color={textColor}>
+                                Hi, I'm {data.name}
+                            </Heading>
+                            <Text fontSize="xl" color={textColor}>
+                                A passionate Front-End Developer specializing in building
+                                responsive and interactive websites using modern technologies.
+                            </Text>
+                        </Box>
+                    </Flex>
 
-                        <Box w="100%" maxW="800px" bg="grey" p={6} borderRadius="md" boxShadow="md">
-                            <Heading as="h2" size="lg" mb={4}>
+                    <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10} w="100%">
+                        <Box bg={cardBgColor} p={8} borderRadius="lg" boxShadow="xl">
+                            <Heading as="h2" size="xl" mb={6} color={textColor}>
                                 About Me
                             </Heading>
                             <Stack spacing={4}>
-                                <HStack>
-                                    <Text fontWeight="bold">Name:</Text>
-                                    <Text>{data.name}</Text>
-                                </HStack>
-                                <HStack>
-                                    <Text fontWeight="bold">Username:</Text>
-                                    <Text>{data.username}</Text>
-                                </HStack>
-                                <HStack>
-                                    <Text fontWeight="bold">Email:</Text>
-                                    <Text>{data.email}</Text>
-                                </HStack>
-                                <HStack>
-                                    <Text fontWeight="bold">Phone:</Text>
-                                    <Text>{data.phone}</Text>
-                                </HStack>
-                                <HStack>
-                                    <Text fontWeight="bold">Address:</Text>
-                                    <Text>{`${data.address.street}, ${data.address.city}, ${data.address.zipcode}`}</Text>
-                                </HStack>
+                                {[
+                                    { label: 'Name', value: data.name },
+                                    { label: 'Username', value: data.username },
+                                    { label: 'Email', value: data.email },
+                                    { label: 'Phone', value: data.phone },
+                                    { label: 'Address', value: `${data.address.street}, ${data.address.city}, ${data.address.zipcode}` },
+                                ].map((item, index) => (
+                                    <HStack key={index}>
+                                        <Text fontWeight="bold" color={textColor}>{item.label}:</Text>
+                                        <Text color={textColor}>{item.value}</Text>
+                                    </HStack>
+                                ))}
                             </Stack>
                         </Box>
-                        <Box w="100%" maxW="800px" bg="grey" p={6} borderRadius="md" boxShadow="md">
-                            <Heading as="h2" size="lg" mb={4}>
+
+                        <Box bg={cardBgColor} p={8} borderRadius="lg" boxShadow="xl">
+                            <Heading as="h2" size="xl" mb={6} color={textColor}>
                                 Skills
                             </Heading>
                             <SimpleGrid columns={{ base: 2, md: 4 }} spacing={10}>
                                 {data.skills.map((skill, index) => (
-                                    <Box key={index} textAlign="center">
-                                        {skill === 'React' && <Icon as={FaReact} w={10} h={10} color="blue.500" />}
-                                        {skill === 'HTML5' && <Icon as={FaHtml5} w={10} h={10} color="orange.500" />}
-                                        {skill === 'CSS3' && <Icon as={FaCss3Alt} w={10} h={10} color="blue.600" />}
-                                        {skill === 'JavaScript' && <Icon as={FaJsSquare} w={10} h={10} color="yellow.500" />}
-                                        <Text mt={2}>{skill}</Text>
-                                    </Box>
+                                    <VStack key={index}>
+                                        <Icon
+                                            as={
+                                                skill === 'React' ? FaReact :
+                                                    skill === 'HTML5' ? FaHtml5 :
+                                                        skill === 'CSS3' ? FaCss3Alt :
+                                                            FaJsSquare
+                                            }
+                                            w={12}
+                                            h={12}
+                                            color={
+                                                skill === 'React' ? 'blue.500' :
+                                                    skill === 'HTML5' ? 'orange.500' :
+                                                        skill === 'CSS3' ? 'blue.600' :
+                                                            'yellow.500'
+                                            }
+                                        />
+                                        <Text color={textColor} fontWeight="medium">{skill}</Text>
+                                    </VStack>
                                 ))}
                             </SimpleGrid>
                         </Box>
-                        <Box w="100%" maxW="800px" bg="grey" p={6} borderRadius="md" boxShadow="md">
-                            <Heading as="h2" size="lg" mb={4}>
-                                Projects
-                            </Heading>
-                            <Stack spacing={4}>
-                                {data.projects.map((project, index) => (
-                                    <Box key={index}>
-                                        <Heading as="h3" size="md">{project.title}</Heading>
-                                        <Text>{project.description}</Text>
-                                    </Box>
-                                ))}
-                            </Stack>
-                        </Box>
                     </SimpleGrid>
+
+                    <Box w="100%" bg={cardBgColor} p={8} borderRadius="lg" boxShadow="xl">
+                        <Heading as="h2" size="xl" mb={6} color={textColor}>
+                            Projects
+                        </Heading>
+                        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={8}>
+                            {data.projects.map((project, index) => (
+                                <Box key={index} p={5} shadow="md" borderWidth="1px" borderRadius="md">
+                                    <Heading as="h3" size="lg" mb={2} color={textColor}>{project.title}</Heading>
+                                    <Text color={textColor} mb={4}>{project.description}</Text>
+                                </Box>
+                            ))}
+                        </SimpleGrid>
+                    </Box>
                 </VStack>
             </Container>
         </Box>

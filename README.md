@@ -1,3 +1,24 @@
+User Readme File{
+Project description:
+
+Technologies Used:
+-React
+-Chakra Ui,
+
+Frontend:
+-Command to run the client side: npm start
+-There are three components auth, Login and portfolio.
+-After login, page will be redirected to portfolio page.
+
+Backend:
+-For updating the details of user on portfolio page, json server is used.
+-A db.json file is creted inside the root directory and user data is fetched from this to show on portfolio.
+-Data is fetched from Json using localhost server.
+-command for Json server:- npx json-server db.json
+
+
+}
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
