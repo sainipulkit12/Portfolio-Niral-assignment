@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
     Image, Button, Input, HStack, FormControl, FormLabel, Flex, Stack, Heading, Text,
-    Checkbox, Link, FormErrorMessage
+     FormErrorMessage
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../auth/Auth';
