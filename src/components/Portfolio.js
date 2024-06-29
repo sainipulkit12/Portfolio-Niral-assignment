@@ -34,7 +34,7 @@ const Portfolio = () => {
         if (!isAuthenticated()) {
             navigate('/');
         } else {
-            axios.get('http://localhost:3000/user')
+            axios.get('/db.json')
                 .then((response) => {
                     console.log('Data fetched successfully:', response.data);
                     setData(response.data);
@@ -90,7 +90,7 @@ const Portfolio = () => {
                         />
                         <Box>
                             <Heading as="h1" size="2xl" mb={4} color={textColor}>
-                                Hi, I'm {data.name}
+                                Hi, I'm {data.user.name}
                             </Heading>
                             <Text fontSize="xl" color={textColor}>
                                 A passionate Front-End Developer specializing in building
@@ -106,11 +106,11 @@ const Portfolio = () => {
                             </Heading>
                             <Stack spacing={4}>
                                 {[
-                                    { label: 'Name', value: data.name },
-                                    { label: 'Username', value: data.username },
-                                    { label: 'Email', value: data.email },
-                                    { label: 'Phone', value: data.phone },
-                                    { label: 'Address', value: `${data.address.street}, ${data.address.city}, ${data.address.zipcode}` },
+                                    { label: 'Name', value: data.user.name },
+                                    { label: 'Username', value: data.user.username },
+                                    { label: 'Email', value: data.user.email },
+                                    { label: 'Phone', value: data.user.phone },
+                                    { label: 'Address', value: `${data.user.address.street}, ${data.user.address.city}, ${data.user.address.zipcode}` },
                                 ].map((item, index) => (
                                     <HStack key={index}>
                                         <Text fontWeight="bold" color={textColor}>{item.label}:</Text>
@@ -125,7 +125,7 @@ const Portfolio = () => {
                                 Skills
                             </Heading>
                             <SimpleGrid columns={{ base: 2, md: 4 }} spacing={10}>
-                                {data.skills.map((skill, index) => (
+                                {data.user.skills.map((skill, index) => (
                                     <VStack key={index}>
                                         <Icon
                                             as={
@@ -155,7 +155,7 @@ const Portfolio = () => {
                             Projects
                         </Heading>
                         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={8}>
-                            {data.projects.map((project, index) => (
+                            {data.user.projects.map((project, index) => (
                                 <Box key={index} p={5} shadow="md" borderWidth="1px" borderRadius="md">
                                     <Heading as="h3" size="lg" mb={2} color={textColor}>{project.title}</Heading>
                                     <Text color={textColor} mb={4}>{project.description}</Text>
