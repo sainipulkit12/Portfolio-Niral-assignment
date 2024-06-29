@@ -13,8 +13,12 @@ Frontend:
 Backend:
 -For updating the details of user on portfolio page, json server is used.
 -A db.json file is creted inside the root directory and user data is fetched from this to show on portfolio.
--Data is fetched from Json using localhost server.
--command for Json server:- npx json-server db.json
+-Data can be access through localhost server on 5000 port.
+
+-When other users clone this repository they need to:-
+-Run 'npm start' to install dependencies.
+-Run 'npm run server' to start json server.
+-Run 'npm start' to start the application.
 
 
 }
