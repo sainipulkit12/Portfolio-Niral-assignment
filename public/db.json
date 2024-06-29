@@ -1,0 +1,30 @@
+{
+  "user": {
+    "id": 1,
+    "name": "Pulkit Saini",
+    "username": "Sainipulkit12",
+    "email": "sainipulkit12.com",
+    "phone": "9057276452",
+    "address": {
+      "street": "Hsr Layout",
+      "city": "Bangalore",
+      "zipcode": "560034"
+    },
+    "skills": [
+      "React",
+      "HTML5",
+      "CSS3",
+      "JavaScript"
+    ],
+    "projects": [
+      {
+        "title": "E-comm using React-Redux",
+        "description": "A fully responsive website built with React and Redux."
+      },
+      {
+        "title": "Budget Expense Tracker",
+        "description": "Web based applications to help users to manage their budget."
+      }
+    ]
+  }
+}
